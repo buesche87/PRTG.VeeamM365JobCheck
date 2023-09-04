@@ -27,7 +27,7 @@
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 
 # General parameters
-$UpdatePath       = "https://raw.githubusercontent.com/buesche87/PRTG.Veeam365JobCheck/main/Check-Veeam365Jobs-XML.ps1"
+$UpdatePath       = "https://raw.githubusercontent.com/buesche87/PRTG.VeeamM365JobCheck/main/VeeamM365JobCheck-XML.ps1"
 $nl               = [Environment]::NewLine
 $resultFolder     = "C:\Temp\VeeamResults"
 

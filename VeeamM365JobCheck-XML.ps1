@@ -96,6 +96,7 @@ function Set-XMLContent {
     $result+=   "  <channel>Processing Rate</channel>" + $nl
     $result+=   "  <value>$($JobResult.ProcRate)</value>" + $nl
     $result+=   "  <Float>1</Float>" + $nl
+    $result+=   "  <DecimalMode>Auto</DecimalMode>" + $nl
     $result+=   "  <CustomUnit>MB/s</CustomUnit>" + $nl
     $result+=   "  <showChart>1</showChart>" + $nl
     $result+=   "  <showTable>1</showTable>" + $nl
@@ -105,6 +106,7 @@ function Set-XMLContent {
     $result+=   "  <channel>Read Rate</channel>" + $nl
     $result+=   "  <value>$($JobResult.ReadRate)</value>" + $nl
     $result+=   "  <Float>1</Float>" + $nl
+    $result+=   "  <DecimalMode>Auto</DecimalMode>" + $nl
     $result+=   "  <CustomUnit>MB/s</CustomUnit>" + $nl
     $result+=   "  <showChart>1</showChart>" + $nl
     $result+=   "  <showTable>1</showTable>" + $nl
@@ -114,6 +116,7 @@ function Set-XMLContent {
     $result+=   "  <channel>Write Rate</channel>" + $nl
     $result+=   "  <value>$($JobResult.WriteRate)</value>" + $nl
     $result+=   "  <Float>1</Float>" + $nl
+    $result+=   "  <DecimalMode>Auto</DecimalMode>" + $nl
     $result+=   "  <CustomUnit>MB/s</CustomUnit>" + $nl
     $result+=   "  <showChart>1</showChart>" + $nl
     $result+=   "  <showTable>1</showTable>" + $nl
@@ -123,6 +126,7 @@ function Set-XMLContent {
     $result+=   "  <channel>Transferiert</channel>" + $nl
     $result+=   "  <value>$($JobResult.TransData)</value>" + $nl
     $result+=   "  <Float>1</Float>" + $nl
+    $result+=   "  <DecimalMode>Auto</DecimalMode>" + $nl
     $result+=   "  <CustomUnit>MB</CustomUnit>" + $nl
     $result+=   "  <showChart>1</showChart>" + $nl
     $result+=   "  <showTable>1</showTable>" + $nl
@@ -132,6 +136,7 @@ function Set-XMLContent {
     $result+=   "  <channel>Dauer</channel>" + $nl
     $result+=   "  <value>$($JobResult.Duration)</value>" + $nl
     $result+=   "  <Float>1</Float>" + $nl
+    $result+=   "  <DecimalMode>Auto</DecimalMode>" + $nl
     $result+=   "  <CustomUnit>Min</CustomUnit>" + $nl
     $result+=   "  <showChart>1</showChart>" + $nl
     $result+=   "  <showTable>1</showTable>" + $nl
@@ -144,9 +149,9 @@ function Set-XMLContent {
     $result+=   "  <showChart>1</showChart>" + $nl
     $result+=   "  <showTable>1</showTable>" + $nl
     $result+=   "  <LimitMaxWarning>$WarningLevel</LimitMaxWarning>" + $nl
-    $result+=   "  <LimitWarningMsg>Backup-Job &#228;lter als 24h</LimitWarningMsg>" + $nl
+    $result+=   "  <LimitWarningMsg>Backup-Job älter als 24h</LimitWarningMsg>" + $nl
     $result+=   "  <LimitMaxError>$ErrorLevel</LimitMaxError>" + $nl
-    $result+=   "  <LimitErrorMsg>Backup-Job &#228;lter als 36h</LimitErrorMsg>" + $nl
+    $result+=   "  <LimitErrorMsg>Backup-Job älter als 36h</LimitErrorMsg>" + $nl
     $result+=   "  <LimitMode>1</LimitMode>" + $nl
     $result+=   "</result>" + $nl
 
@@ -188,6 +193,7 @@ function Get-Statistics {
     )
 
     # Get item per second
+    $procrate = $Session.Statistics.ProcessingRate -split '\s+'
     $JobResult.ProcItems = $procrate[2] -replace '[()]',''
 
     # Check processing speed and output it as MB/s
@@ -225,8 +231,8 @@ function Get-JobLog {
 
     # Find warning and error messages in session log
     $warningmsg = ""
-    $failedmsg  = ""
     $warningmsg = $Session.Log | Where-Object {$_.Title -like "*Warning*"} | ForEach-Object { $_.title }
+    $failedmsg  = ""
     $failedmsg  = $Session.Log | Where-Object {$_.Title -like "*Failed*"} | ForEach-Object { $_.title }
 
     if ($failedmsg)      { Return $failedmsg }
@@ -288,7 +294,7 @@ foreach($item in $BackupJobs) {
     $JobResult.Name = $item.Name
 
     # Load last session
-    $Session = Get-VBOJobSession | Where-Object { ( $_.JobName -like $JobResult.Name ) } | Sort-Object -Property Creationtime -Descending | Select-Object -First 1
+    $Session = Get-VBOJobSession -Job $item -Last
 
     # Check job results
     $JobResult = Get-JobResult $Session
@@ -300,5 +306,5 @@ foreach($item in $BackupJobs) {
     if ($CheckJobError) { $JobResult.Text = $CheckJobError }
 
     # Create XML 
-    Set-XMLContent -JobResult $JobResult -HoursSince $HoursSince
+    Set-XMLContent -JobResult $JobResult
 }

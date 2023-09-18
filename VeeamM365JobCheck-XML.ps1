@@ -14,7 +14,7 @@
 
     .NOTES
     Author  : Andreas Bucher
-    Version : 0.9.1
+    Version : 1.0.0
     Purpose : XML-Part of the PRTG-Sensor VeeamM365JobCheck
 
     .EXAMPLE
@@ -27,7 +27,6 @@
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 
 # General parameters
-$UpdatePath       = "https://raw.githubusercontent.com/buesche87/PRTG.VeeamM365JobCheck/main/VeeamM365JobCheck-XML.ps1"
 $nl               = [Environment]::NewLine
 $resultFolder     = "C:\Temp\VeeamResults"
 
@@ -239,52 +238,7 @@ function Get-JobLog {
     elseif ($warningmsg) { Return $warningmsg }
     else                 { Return }
 }
-# Update Script
-function Get-NewScript {
-
-    # Check if Update-Script is reachable
-    $StatusCode = Invoke-WebRequest $UpdatePath -UseBasicParsing | ForEach-Object {$_.StatusCode}
-    $CurrentScript = $PSCommandPath
-
-    if ($StatusCode -eq 200 ) {
-
-        # Parse version string of script on github
-        $UpdateScriptcontent = (Invoke-webrequest -URI $UpdatePath -UseBasicParsing).Content
-        $newversionstring    = ($UpdateScriptcontent | Select-String "Version :.*" | Select-Object -First 1).Matches.Value
-        $newversion          = $newversionstring -replace '[^0-9"."]',''
-
-        # Parse version string of current script
-        $CurrentScriptContent = Get-Content -Path $PSCommandPath -Encoding UTF8 -Raw
-        $currentversionstring = ($CurrentScriptContent | Select-String "Version :.*" | Select-Object -First 1).Matches.Value
-        $currentversion       = $currentversionstring -replace '[^0-9"."]',''
-
-        # Replace and re-run script if update-script is newer
-        if ([version]$newversion -gt [version]$currentversion) {
-
-            # Create temp directory if it does not exists
-            $tmpdirectory = "C:\Temp"
-            if(-not (test-path $tmpdirectory)){ New-Item -Path $tmpdirectory -ItemType Directory }
-
-            # Create a temporary file with content of the new script
-            $tempfile = "$tmpdirectory\update-script.new"
-            Invoke-WebRequest -URI $UpdatePath -outfile $tempfile
-
-            # Replace current script
-            $content = Get-Content $tempfile -Encoding utf8 -raw
-            $content | Set-Content $CurrentScript -encoding UTF8
-
-            # Remove temporary file
-            Remove-Item $tempfile
-
-            # Call new script
-            &$CurrentScript $script:args
-        }
-    }
-}
 #-----------------------------------------------------------[Execute]------------------------------------------------------------
-# Autouptade Script
-# Get-NewScript
-
 # Get M365 BackupJobs
 $BackupJobs = Get-VBOJob | where-object { $_.IsEnabled -eq $True }
 

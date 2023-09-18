@@ -283,7 +283,7 @@ function Get-NewScript {
 }
 #-----------------------------------------------------------[Execute]------------------------------------------------------------
 # Autouptade Script
-Get-NewScript
+# Get-NewScript
 
 # Get M365 BackupJobs
 $BackupJobs = Get-VBOJob | where-object { $_.IsEnabled -eq $True }

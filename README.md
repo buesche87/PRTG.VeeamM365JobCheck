@@ -1,6 +1,6 @@
 # PRTG.VeeamM365JobCheck
 
-This is a PRTG Sensor that checks all acive backupjobs in Veeam for Microsoft 365.
+This is a PRTG Sensor that checks all active backupjobs in Veeam for Microsoft 365.
 
 The XML part is meant to be scheduled on the host where executed the script creates a PRTG formatted XML-file in ```C:\Temp\VeeamResults```
 

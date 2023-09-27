@@ -1,47 +1,52 @@
 ﻿<#
     .SYNOPSIS
-    This script opens a PS-Drive to check for XML files created through VeeamM365JobCheck-XML.ps1.
-    This Script is meant to be used as PRTG custom sensor.
+		This script opens a PS-Drive to check for XML files created through VeeamM365JobCheck-XML.ps1.
+		This Script is meant to be used as PRTG custom sensor.
 
     .PARAMETER HostName
-    HostName where the XML is located.
-    This parameter is mandantory.
+		HostName where the XML is located.
+		This parameter is mandantory.
 
     .PARAMETER JobName
-    JobName of the Veeam for Microsoft 365 backupjob to be monitored
-    This parameter is mandantory.
+		JobName of the Veeam for Microsoft 365 backupjob to be monitored
+		This parameter is mandantory.
 
     .PARAMETER UserName
-    UserName to connect to the server where the xml is located
-    This parameter is optional.
+		UserName to connect to the server where the xml is located
+		This parameter is optional.
 
     .PARAMETER Password
-    Password to connect to the server where the xml is located
-    This parameter is optional.
+		Password to connect to the server where the xml is located
+		This parameter is optional.
 
     .INPUTS
-    None
+		None
 
     .OUTPUTS
-    This script retrives an xml file and parses it to PRTG
+		This script retrives an xml file and parses it to PRTG
 
     .LINK
-    https://raw.githubusercontent.com/tn-ict/Public/master/Disclaimer/DISCLAIMER
+		Disclamer: https://raw.githubusercontent.com/tn-ict/Public/master/Disclaimer/DISCLAIMER
 
     .NOTES
-    Author  : Andreas Bucher
-    Version : 1.0.0
-    Purpose : XML-Part of the PRTG-Sensor VeeamM365JobCheck
+		Author:  Andreas Bucher
+		Version: 1.0.0
+		Date:    27.09.2023
+		Purpose: PRTG-Part of the PRTG-Sensor VeeamM365JobCheck
 
     .EXAMPLE
-    Create a Sensor in PRTG with the parameters as following
-    -HostName '%host' -JobName 'Jobname' -UserName '%windowsdomain\%windowsuser' -Password '%windowspassword'
-    Those %-parameters are retreived from the PRTG WebGUI
+		-HostName '%host' -JobName 'Jobname' -UserName '%windowsdomain\%windowsuser' -Password '%windowspassword'
+		
+		Create a Sensor in PRTG with the parameters above.
+		The %-parameters are retreived from the PRTG WebGUI.
 
-    Try it standalone
-    .\VeeamM365JobCheck-PRTG.ps1 -JobName "Jobname" -HostName "Host" -UserName "domain\username" -Password "password"
+    .EXAMPLE
+		.\VeeamM365JobCheck-PRTG.ps1 -JobName "Jobname" -HostName "Host" -UserName "domain\username" -Password "password"
+		
+		Try it standalone
 
 #>
+
 #----------------------------------------------------------[Declarations]----------------------------------------------------------
 # Declare input parameters
 Param(

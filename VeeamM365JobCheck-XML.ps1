@@ -1,28 +1,28 @@
 ﻿<#
     .SYNOPSIS
-		This script checks the status of all active Veeam for Microsoft 365 Jobs on a backup server.
-		It collects detailed information and creates an XML file per backupjob as output.
-		The XML will be placeed in C:\Temp\VeeamResults where it can be retreived by the PRTG-Sensor
+        This script checks the status of all active Veeam for Microsoft 365 Jobs on a backup server.
+        It collects detailed information and creates an XML file per backupjob as output.
+        The XML will be placeed in C:\Temp\VeeamResults where it can be retreived by the PRTG-Sensor
 
     .INPUTS
-		None
+        None
 
     .OUTPUTS
-		The script creates a XML file formated for PRTG.
+        The script creates a XML file formated for PRTG.
 
     .LINK
-		Disclamer: https://raw.githubusercontent.com/tn-ict/Public/master/Disclaimer/DISCLAIMER
+        Disclamer: https://raw.githubusercontent.com/tn-ict/Public/master/Disclaimer/DISCLAIMER
 
     .NOTES
-		Author:  Andreas Bucher
-		Version: 1.0.0
-		Date:    27.09.2023
-		Purpose: XML-Part of the PRTG-Sensor VeeamM365JobCheck
+        Author:  Andreas Bucher
+        Version: 1.0.0
+        Date:    27.09.2023
+        Purpose: XML-Part of the PRTG-Sensor VeeamM365JobCheck
 
     .EXAMPLE
-		powershell.exe -NoProfile -NoLogo -NonInteractive -ExecutionPolicy Bypass -File "C:\Script\VeeamM365JobCheck-XML.ps1"
-		
-		Run this script with task scheduler use powershell.exe as program and the parameters as described
+        powershell.exe -NoProfile -NoLogo -NonInteractive -ExecutionPolicy Bypass -File "C:\Script\VeeamM365JobCheck-XML.ps1"
+        
+        Run this script with task scheduler use powershell.exe as program and the parameters as described
 #>
 
 #----------------------------------------------------------[Declarations]----------------------------------------------------------
